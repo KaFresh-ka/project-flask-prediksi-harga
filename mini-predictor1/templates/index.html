@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Prediksi Harga Rumah</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background-color: #f9f9f9;
+        }
+        .form-container {
+            max-width: 500px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+        }
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+        }
+        button:hover {
+            background-color: #0056b3;
+            cursor: pointer;
+        }
+        .result {
+            margin-top: 20px;
+            background: #dff0d8;
+            color: #3c763d;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Prediksi Harga Rumah</h2>
+        <form method="POST">
+            <label>Luas Tanah (m²):</label>
+            <input type="number" name="luas_tanah" required min="1">
+
+            <label>Jumlah Kamar:</label>
+            <input type="number" name="jumlah_kamar" required min="1">
+
+            <label>Lokasi:</label>
+            <select name="lokasi" required>
+                <option value="">--Pilih Lokasi--</option>
+                <option value="1">Kota</option>
+                <option value="0">Desa</option>
+            </select>
+
+            <button type="submit">Prediksi</button>
+            <button type="reset" style="background-color: #6c757d; margin-top:10px;">Reset</button>
+        </form>
+
+        {% if error %}
+    <div class="result" style="background: #f8d7da; color: #721c24;">
+        <h3>Terjadi Error:</h3>
+        <p>{{ error }}</p>
+    </div>
+{% endif %}
+
+{% if prediction %}
+    <div class="result">
+        <h3>Harga Prediksi:</h3>
+        <p><strong>Rp {{ prediction }} juta</strong></p>
+        {% if advice %}
+            <p><em>{{ advice }}</em></p>
+        {% endif %}
+    </div>
+{% endif %}
+
+    </div>
+</body>
+</html>
