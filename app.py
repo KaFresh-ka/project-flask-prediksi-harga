@@ -18,18 +18,22 @@ def home():
             kamar = int(request.form['kamar'])
             lokasi = request.form['lokasi']
 
+            # Encode lokasi
             lokasi_mapping = {'jakarta': 5, 'bandung': 3, 'surabaya': 4}
             lokasi_encoded = lokasi_mapping.get(lokasi.lower(), 0)
 
             fitur = np.array([[luas, kamar, lokasi_encoded]])
             prediksi = model.predict(fitur)
-            harga_prediksi = max(prediksi[0], 0)  # Hindari harga minus
-
             harga = max(prediksi[0], 0)  # Hindari nilai minus
-        return render_template('index.html', prediction_text=f'Harga Rumah Diprediksi: Rp {harga:,.0f}')
 
+            return render_template('index.html', prediction_text=f'Harga Rumah Diprediksi: Rp {harga:,.0f}')
+        except Exception as e:
+            error = str(e)
+            return render_template('index.html', error=error)
+    else:
+        return render_template('index.html')
 
-# Ini wajib untuk Railway
+# Untuk Railway / deploy
 if __name__ == "__main__":
     import os
     port = int(os.environ.get("PORT", 8000))

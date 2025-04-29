@@ -6,27 +6,37 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 40px;
-            background-color: #f9f9f9;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
         }
         .form-container {
             max-width: 500px;
-            margin: auto;
+            margin: 50px auto;
             background: white;
-            padding: 20px;
+            padding: 30px;
             border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
-        input, button, select {
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        label {
+            display: block;
+            margin-top: 15px;
+        }
+        input, select, button {
             width: 100%;
             padding: 10px;
-            margin-top: 10px;
+            margin-top: 5px;
             border-radius: 5px;
             border: 1px solid #ccc;
         }
         button {
             background-color: #007BFF;
             color: white;
+            margin-top: 20px;
             border: none;
         }
         button:hover {
@@ -35,11 +45,17 @@
         }
         .result {
             margin-top: 20px;
+            padding: 15px;
+            text-align: center;
+            border-radius: 5px;
+        }
+        .success {
             background: #dff0d8;
             color: #3c763d;
-            padding: 15px;
-            border-radius: 5px;
-            text-align: center;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
         }
     </style>
 </head>
@@ -47,38 +63,32 @@
     <div class="form-container">
         <h2>Prediksi Harga Rumah</h2>
         <form method="POST">
-            <label for="luas">Luas Tanah:</label>
-            <input type="number" id="luas" name="luas" required><br><br>
-        
+            <label for="luas">Luas Tanah (m²):</label>
+            <input type="number" id="luas" name="luas" required>
+
             <label for="kamar">Jumlah Kamar:</label>
-            <input type="number" id="kamar" name="kamar" required><br><br>
-        
+            <input type="number" id="kamar" name="kamar" required>
+
             <label for="lokasi">Lokasi:</label>
             <select id="lokasi" name="lokasi" required>
                 <option value="jakarta">Jakarta</option>
                 <option value="bandung">Bandung</option>
                 <option value="surabaya">Surabaya</option>
-                <option value="yogyakarta">Yogyakarta</option>
-                <option value="semarang">Semarang</option>
-                <option value="malang">Malang</option>
-            </select><br><br>
-        
-            <label for="tahun_bangunan">Tahun Bangunan:</label>
-            <input type="number" id="tahun_bangunan" name="tahun_bangunan" required><br><br>
-        
+            </select>
+
             <button type="submit">Prediksi Harga</button>
         </form>
-        
 
-        {% if error %}
-            <div class="result" style="background: #f8d7da; color: #721c24;">
-                <h3>Terjadi Error:</h3>
-                <p>{{ error }}</p>
+        {% if prediction_text %}
+            <div class="result success">
+                {{ prediction_text }}
             </div>
         {% endif %}
 
-        {% if prediction_text %}
-            <h3>{{ prediction_text }}</h3>
+        {% if error %}
+            <div class="result error">
+                <strong>Error:</strong> {{ error }}
+            </div>
         {% endif %}
     </div>
 </body>
