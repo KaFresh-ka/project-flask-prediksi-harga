@@ -15,6 +15,7 @@ def home():
             luas = float(request.form['luas'])
             kamar = int(request.form['kamar'])
             lokasi = request.form['lokasi']
+            tahun_bangunan = int(request.form['tahun_bangunan'])
 
             # Update lokasi_mapping dengan kota lain
             lokasi_mapping = {
@@ -28,7 +29,7 @@ def home():
             lokasi_encoded = lokasi_mapping.get(lokasi.lower(), 0)
 
             # Prediksi harga rumah
-            features = np.array([[luas, kamar, lokasi_encoded]])
+            features = np.array([[luas, kamar, lokasi_encoded, tahun_bangunan]])
             prediksi = model.predict(features)
 
             return render_template('index.html', prediction_text=f'Harga Rumah Diprediksi: Rp {prediksi[0]:,.0f}')
@@ -36,6 +37,7 @@ def home():
             return render_template('index.html', prediction_text=f"Error: {str(e)}")
     
     return render_template('index.html')
+
 
 
 if __name__ == "__main__":
