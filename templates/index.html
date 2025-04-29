@@ -1,93 +1,116 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <title>Prediksi Harga Rumah</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            background: #f0f2f5;
             margin: 0;
             padding: 0;
         }
-        .form-container {
-            max-width: 500px;
-            margin: 50px auto;
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background: #fff;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
         h2 {
             text-align: center;
-            color: #333;
+            margin-bottom: 20px;
         }
         label {
+            margin-top: 10px;
             display: block;
-            margin-top: 15px;
+            font-weight: bold;
         }
         input, select, button {
             width: 100%;
             padding: 10px;
-            margin-top: 5px;
-            border-radius: 5px;
+            margin-top: 6px;
+            border-radius: 8px;
             border: 1px solid #ccc;
+            box-sizing: border-box;
         }
         button {
-            background-color: #007BFF;
-            color: white;
-            margin-top: 20px;
+            background: #007BFF;
+            color: #fff;
+            font-weight: bold;
             border: none;
         }
         button:hover {
-            background-color: #0056b3;
-            cursor: pointer;
+            background: #0056b3;
         }
         .result {
             margin-top: 20px;
             padding: 15px;
+            border-radius: 8px;
+            background: #d4edda;
+            color: #155724;
             text-align: center;
-            border-radius: 5px;
-        }
-        .success {
-            background: #dff0d8;
-            color: #3c763d;
         }
         .error {
             background: #f8d7da;
             color: #721c24;
         }
+        .history {
+            margin-top: 30px;
+        }
+        .history ul {
+            list-style: none;
+            padding: 0;
+        }
+        .history li {
+            background: #f9f9f9;
+            padding: 10px;
+            margin-top: 5px;
+            border-radius: 6px;
+        }
     </style>
 </head>
 <body>
-    <div class="form-container">
+    <div class="container">
         <h2>Prediksi Harga Rumah</h2>
         <form method="POST">
             <label for="luas">Luas Tanah (m²):</label>
-            <input type="number" id="luas" name="luas" required>
+            <input type="number" name="luas" id="luas" required>
 
             <label for="kamar">Jumlah Kamar:</label>
-            <input type="number" id="kamar" name="kamar" required>
+            <input type="number" name="kamar" id="kamar" required>
 
-            <label for="lokasi">Lokasi:</label>
-            <select id="lokasi" name="lokasi" required>
-                <option value="jakarta">Jakarta</option>
-                <option value="bandung">Bandung</option>
-                <option value="surabaya">Surabaya</option>
+            <label for="lantai">Jumlah Lantai:</label>
+            <input type="number" name="lantai" id="lantai" required>
+
+            <label for="lokasi">Lokasi (Kota):</label>
+            <select name="lokasi" id="lokasi" required>
+                {% for kota in cities %}
+                    <option value="{{ kota }}">{{ kota.title() }}</option>
+                {% endfor %}
             </select>
 
-            <button type="submit">Prediksi Harga</button>
+            <button type="submit">Prediksi</button>
         </form>
 
-        {% if prediction_text %}
-            <div class="result success">
-                {{ prediction_text }}
-            </div>
+        {% if prediction %}
+            <div class="result">{{ prediction }}</div>
         {% endif %}
 
         {% if error %}
-            <div class="result error">
-                <strong>Error:</strong> {{ error }}
+            <div class="result error">{{ error }}</div>
+        {% endif %}
+
+        {% if history %}
+            <div class="history">
+                <h3>Riwayat Prediksi:</h3>
+                <ul>
+                    {% for item in history %}
+                        <li>{{ item.lokasi }} - {{ item.luas }}m², {{ item.kamar }} kamar, {{ item.lantai }} lantai → Rp {{ item.harga | round | int | string | replace(",", ".") | replace(".", ",") }}</li>
+                    {% endfor %}
+                </ul>
             </div>
         {% endif %}
     </div>
