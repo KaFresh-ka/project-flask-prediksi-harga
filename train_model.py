@@ -1,24 +1,21 @@
+import pandas as pd
+import numpy as np
 import pickle
 from sklearn.linear_model import LinearRegression
-import numpy as np
 
-# Contoh data: Luas Tanah, Jumlah Kamar, Lokasi (encoded)
-X = np.array([
-    [100, 3, 5],
-    [120, 4, 3],
-    [80, 2, 4],
-    [150, 4, 5],
-    [90, 3, 2]
-])
+# Load data
+data = pd.read_csv('data/dataset.csv')
 
-y = np.array([500000, 600000, 400000, 750000, 450000])
+# Encode lokasi
+lokasi_mapping = {'jakarta': 5, 'bandung': 3, 'surabaya': 4}
+data['lokasi_encoded'] = data['lokasi'].map(lambda x: lokasi_mapping.get(x.lower(), 0))
 
-# Bikin model
+# Training
+X = data[['luas', 'kamar', 'lokasi_encoded']]
+y = data['harga']
+
 model = LinearRegression()
 model.fit(X, y)
 
-# Simpan model ke file model.pkl
-with open('model.pkl', 'wb') as f:
-    pickle.dump(model, f)
-
-print("Model sudah disimpan ke model.pkl!")
+# Simpan model
+pickle.dump(model, open('model.pkl', 'wb'))
