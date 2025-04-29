@@ -11,11 +11,14 @@ model = pickle.load(open('model.pkl', 'rb'))
 @app.route('/', methods=['GET', 'POST'])
 def home():
     if request.method == 'POST':
-        # Tangkap form dan lakukan prediksi
-        luas = float(request.form['luas'])
-        kamar = int(request.form['kamar'])
-        lokasi = request.form['lokasi']
+        try:
+            luas = float(request.form['luas'])
+            kamar = int(request.form['kamar'])
+            lokasi = request.form['lokasi']
+        except KeyError as e:
+            return f"Error: Key {str(e)} tidak ditemukan dalam form", 400
 
+        # Proses prediksi
         lokasi_mapping = {'jakarta': 5, 'bandung': 3, 'surabaya': 4}
         lokasi_encoded = lokasi_mapping.get(lokasi.lower(), 0)
 
