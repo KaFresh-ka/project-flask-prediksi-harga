@@ -12,19 +12,19 @@ def home():
     if request.method == 'POST':
         try:
             # Ambil input dari form
-            luas = request.form['luas']
-            kamar = request.form['kamar']
+            luas = float(request.form['luas'])
+            kamar = int(request.form['kamar'])
             lokasi = request.form['lokasi']
-            
-            # Validasi input
-            if not luas.isdigit() or not kamar.isdigit() or float(luas) <= 0 or int(kamar) <= 0:
-                raise ValueError("Input invalid. Pastikan 'Luas Tanah' dan 'Jumlah Kamar' adalah angka positif.")
-            
-            luas = float(luas)
-            kamar = int(kamar)
 
-            # Encode lokasi
-            lokasi_mapping = {'jakarta': 5, 'bandung': 3, 'surabaya': 4}
+            # Update lokasi_mapping dengan kota lain
+            lokasi_mapping = {
+                'jakarta': 5, 
+                'bandung': 3, 
+                'surabaya': 4, 
+                'yogyakarta': 2,  # Menambahkan Yogyakarta
+                'semarang': 1,    # Menambahkan Semarang
+                'malang': 6       # Menambahkan Malang
+            }
             lokasi_encoded = lokasi_mapping.get(lokasi.lower(), 0)
 
             # Prediksi harga rumah
@@ -36,6 +36,7 @@ def home():
             return render_template('index.html', prediction_text=f"Error: {str(e)}")
     
     return render_template('index.html')
+
 
 if __name__ == "__main__":
     import os

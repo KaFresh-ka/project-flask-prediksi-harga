@@ -17,7 +17,7 @@
             border-radius: 10px;
             box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
         }
-        input, button {
+        input, button, select {
             width: 100%;
             padding: 10px;
             margin-top: 10px;
@@ -58,23 +58,24 @@
                 <option value="jakarta">Jakarta</option>
                 <option value="bandung">Bandung</option>
                 <option value="surabaya">Surabaya</option>
+                <option value="yogyakarta">Yogyakarta</option>
+                <option value="semarang">Semarang</option>
+                <option value="malang">Malang</option>
             </select><br><br>
         
             <button type="submit">Prediksi Harga</button>
         </form>
 
         {% if error %}
-        <div class="result" style="background: #f8d7da; color: #721c24;">
-            <h3>Terjadi Error:</h3>
-            <p>{{ error }}</p>
-        </div>
-    {% endif %}
-    
-    {% if prediction_text %}
-        <h3>{{ prediction_text }}</h3>
-    {% endif %}
-    
+            <div class="result" style="background: #f8d7da; color: #721c24;">
+                <h3>Terjadi Error:</h3>
+                <p>{{ error }}</p>
+            </div>
+        {% endif %}
 
+        {% if prediction_text %}
+            <h3>{{ prediction_text }}</h3>
+        {% endif %}
     </div>
 </body>
 </html>
