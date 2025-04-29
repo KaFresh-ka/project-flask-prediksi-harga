@@ -25,11 +25,9 @@ def home():
             prediksi = model.predict(fitur)
             harga_prediksi = max(prediksi[0], 0)  # Hindari harga minus
 
-            prediction_text = f'Harga Rumah Diprediksi: Rp {harga_prediksi:,.0f}'
-        except Exception as e:
-            error = str(e)
+            harga = max(prediksi[0], 0)  # Hindari nilai minus
+        return render_template('index.html', prediction_text=f'Harga Rumah Diprediksi: Rp {harga:,.0f}')
 
-    return render_template('index.html', prediction_text=prediction_text, error=error)
 
 # Ini wajib untuk Railway
 if __name__ == "__main__":
