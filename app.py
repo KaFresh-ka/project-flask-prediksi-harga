@@ -1,7 +1,6 @@
 from flask import Flask, render_template, request
 import numpy as np
 import pickle
-import os
 
 app = Flask(__name__)
 
@@ -10,14 +9,19 @@ model = pickle.load(open('model.pkl', 'rb'))
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
-    prediction_text = None
-    error = None
     if request.method == 'POST':
         try:
             # Ambil input dari form
-            luas = float(request.form['luas'])
-            kamar = int(request.form['kamar'])
+            luas = request.form['luas']
+            kamar = request.form['kamar']
             lokasi = request.form['lokasi']
+            
+            # Validasi input
+            if not luas.isdigit() or not kamar.isdigit() or float(luas) <= 0 or int(kamar) <= 0:
+                raise ValueError("Input invalid. Pastikan 'Luas Tanah' dan 'Jumlah Kamar' adalah angka positif.")
+            
+            luas = float(luas)
+            kamar = int(kamar)
 
             # Encode lokasi
             lokasi_mapping = {'jakarta': 5, 'bandung': 3, 'surabaya': 4}
@@ -27,12 +31,11 @@ def home():
             features = np.array([[luas, kamar, lokasi_encoded]])
             prediksi = model.predict(features)
 
-            prediction_text = f'Harga Rumah Diprediksi: Rp {prediksi[0]:,.0f}'
+            return render_template('index.html', prediction_text=f'Harga Rumah Diprediksi: Rp {prediksi[0]:,.0f}')
         except Exception as e:
-            error = f"Terjadi error: {str(e)}"
-
-    return render_template('index.html', prediction_text=prediction_text, error=error)
+            return render_template('index.html', prediction_text=f"Error: {str(e)}")
+    
+    return render_template('index.html')
 
 if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 8000))
-    app.run(host="0.0.0.0", port=port, debug=True)
+    app.run(debug=True)
