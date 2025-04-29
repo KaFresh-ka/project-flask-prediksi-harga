@@ -8,8 +8,22 @@ app = Flask(__name__)
 model = pickle.load(open('model.pkl', 'rb'))
 
 # Halaman utama
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def home():
+    if request.method == 'POST':
+        # Tangkap form dan lakukan prediksi
+        luas = float(request.form['luas'])
+        kamar = int(request.form['kamar'])
+        lokasi = request.form['lokasi']
+
+        lokasi_mapping = {'jakarta': 5, 'bandung': 3, 'surabaya': 4}
+        lokasi_encoded = lokasi_mapping.get(lokasi.lower(), 0)
+
+        features = np.array([[luas, kamar, lokasi_encoded]])
+        prediksi = model.predict(features)
+
+        return render_template('index.html', prediction_text=f'Harga Rumah Diprediksi: Rp {prediksi[0]:,.0f}')
+    
     return render_template('index.html')
 
 # Endpoint prediksi
